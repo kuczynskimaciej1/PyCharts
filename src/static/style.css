@@ -1,0 +1,31 @@
+/* style.css */
+
+header {
+    background-color: #212121;
+    color: #1db954;
+    padding: 10px;
+    text-align: left;
+    font: "Gotham-Bold";
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #b3b3b3;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    padding: 80px;
+}
+
+footer {
+    background-color: #212121;
+    color: #1db954;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
