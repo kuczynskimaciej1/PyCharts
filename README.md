@@ -1,2 +1,0 @@
-# PyCharts
-Dissertation project
