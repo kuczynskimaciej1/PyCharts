@@ -18,7 +18,7 @@
 
     <section>
       <p>Login successful</p>
-      <form action="{{ url_for('logout') }}" method="GET" id="authForm">
+      <form action="{{ url_for('logout') }}" method="GET">
         <button type="submit">Log out</button>
       </form>
       <br />
@@ -26,22 +26,22 @@
       <p>Choose your option:</p>
       <br />
 
-      <form action="{{ url_for('userPlayback') }}" method="GET" id="authForm">
+      <form action="{{ url_for('userPlayback') }}" method="GET">
         <button type="submit">Your last playback</button>
       </form>
       <br />
 
-      <form action="{{ url_for('userFavorites') }}" method="GET" id="authForm">
+      <form action="{{ url_for('userFavorites') }}" method="GET">
         <button type="submit">Your favourites from the last 30 days</button>
       </form>
       <br />
 
-      <form action="{{ url_for('userStatistics') }}" method="GET" id="authForm">
+      <form action="{{ url_for('userStatistics') }}" method="GET">
         <button type="submit">See your numerical statistics</button>
       </form>
       <br />
 
-      <form action="{{ url_for('userGenerate') }}" method="GET" id="authForm">
+      <form action="{{ url_for('generateOptions') }}" method="GET">
         <button type="submit">Generate your own recommendation</button>
       </form>
       <br />

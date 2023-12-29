@@ -61,9 +61,11 @@ def teachEmbeddings(label):
 
     return label_embedding_output
 
+
 def trainEmbeddings():
     ai_global_var.artist_encoded = teachEmbeddings('Artist')
     ai_global_var.album_encoded = teachEmbeddings('Album')
+
 
 def teach(features):
     X_train, X_test = train_test_split(features, test_size=0.2, random_state=42)
@@ -86,6 +88,7 @@ def teach(features):
         layers.Dense(features.shape[1], activation='linear')
     ])
 
+
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=[MeanSquaredError(), CategoricalAccuracy()])
     early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
     checkpoint_path = f'models/spotify_recommendation_model.keras'
@@ -101,6 +104,45 @@ def teach(features):
     plt.plot(validation_accuracy, label='Validation Accuracy')
     plt.plot(training_cat_accuracy, label='Training Cat Accuracy')
     plt.plot(validation_cat_accuracy, label='Validation Cat Accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.show()
+
+
+def teachNumerical(features):
+    X_train, X_test = train_test_split(features, test_size=0.2, random_state=42)
+
+    model = models.Sequential([
+        layers.Dense(128, activation='relu', input_shape=(features.shape[1],)),
+        layers.Dropout(0.2),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(128, activation='relu'),
+        #layers.Dropout(0.5),
+        layers.Dense(256, activation='relu'),
+        layers.Dropout(0.3),
+        layers.Dense(512, activation='relu'),
+        layers.Dropout(0.4),
+        layers.Dense(256, activation='relu'),
+        layers.Dropout(0.3),
+        layers.Dense(128, activation='relu'),
+        #layers.Dropout(0.5),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(features.shape[1], activation='linear')
+    ])
+
+
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics=[MeanSquaredError(), Accuracy()])
+    early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    checkpoint_path = f'models/spotify_recommendation_model_mood.keras'
+    model_checkpoint = ModelCheckpoint(checkpoint_path, save_best_only=True)
+    history = model.fit(X_train, X_train, epochs=100, batch_size=16, validation_data=(X_test, X_test), callbacks=[early_stopping, model_checkpoint])
+    model.save('models/spotify_recommendation_model_mood.h5')
+
+    training_accuracy = history.history['mean_squared_error']
+    validation_accuracy = history.history['val_mean_squared_error']
+    plt.plot(training_accuracy, label='Training Accuracy')
+    plt.plot(validation_accuracy, label='Validation Accuracy')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
     plt.legend()

@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Maciej Kuczynski" />
     <title>PyCharts</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+
+    <!-- Custom CSS -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
@@ -12,11 +20,11 @@
   </head>
 
   <body>
-    <header>
+    <header class="bg-dark text-white text-center py-3">
       <h1>Welcome to PyCharts!</h1>
     </header>
 
-    <section>
+    <section class="container mt-5">
       <p>Sit down and have a cup of tea.</p>
       <br />
       <p>I know you better than anyone else.</p>
@@ -33,11 +41,16 @@
       </form>
     </section>
 
-    <footer>
+    <footer class="fixed-bottom bg-dark text-white text-center py-2">
       <p>
         &copy; 2023 by Maciej Kuczynski for Czestochowa University of
         Technology. All rights reserved.
       </p>
     </footer>
+
+    <!-- Bootstrap JavaScript and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   </body>
 </html>
