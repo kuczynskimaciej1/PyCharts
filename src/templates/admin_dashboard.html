@@ -22,6 +22,10 @@
         <button type="submit">Log out</button>
       </form>
       <br />
+      <form action="{{ url_for('shareFeedback') }}" method="GET">
+        <button type="submit">Share feedback</button>
+      </form>
+      <br />
       <br />
       <p>User options:</p>
       <br />
@@ -41,11 +45,18 @@
       </form>
       <br />
 
-      <form action="{{ url_for('generateOptions') }}" method="GET">
-        <button type="submit">Generate your own recommendation</button>
+      <form action="{{ url_for('aiGenerateOptions') }}" method="GET">
+        <button type="submit">Generate your own recommendation WITH AI</button>
       </form>
       <br />
 
+      <form action="{{ url_for('noAiGenerateOptions') }}" method="GET">
+        <button type="submit">
+          Generate your own recommendation WITHOUT AI
+        </button>
+      </form>
+      <br />
+      <br />
       <p>Admin options:</p>
       <br />
 

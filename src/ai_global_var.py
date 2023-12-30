@@ -37,3 +37,16 @@ mood_features = df[['Speechiness',
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(all_features)
 scaled_mood_features = scaler.fit_transform(mood_features)
+
+all_features_list = ['Speechiness', 
+                   'Instrumentalness', 
+                   'Liveness', 
+                   'Valence', 
+                   'Danceability', 
+                   'Energy', 
+                   'Acousticness',  
+                   'Loudness', 
+                   'Tempo', 
+                   'Duration_min',
+                   'Artist_num',
+                   'Album_num']

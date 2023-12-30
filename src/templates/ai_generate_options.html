@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Maciej Kuczynski" />
+    <title>PyCharts</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>Welcome to PyCharts, {{ user_info['display_name'] }}!</h1>
+    </header>
+
+    <section>
+      <h2>Choose your option for <b>AI RECOMMENDATION</b>:</h2>
+      <br />
+      <h3>One track recommendation</h3>
+      <form action="{{ url_for('singleGenerate') }}" method="POST">
+        <form method="POST">
+          <label for="number_of_tracks">Number of tracks to recommend: </label>
+          <input
+            type="number"
+            id="number_of_tracks"
+            name="number_of_tracks"
+            min="1"
+            max="100"
+            required
+            value="{{ request.form.get('number_of_tracks') }}"
+          />
+          <br />
+        <label for="track">Track to base the recommendation on: </label>
+        <input
+          type="number"
+          id="track"
+          name="track"
+          min="1"
+          max="20594"
+          required
+          value="{{ request.form.get('track') }}"
+        />
+        <br>
+        <button type="submit">Generate</button>
+      </form>
+      <br />
+
+      <h3>Vector recommendation</h3>
+
+      <form action="{{ url_for('vectorGenerate') }}" method="POST">
+        <form method="POST">
+          <label for="number_of_tracks">Number of tracks to recommend: </label>
+          <input
+            type="number"
+            id="number_of_tracks"
+            name="number_of_tracks"
+            min="1"
+            max="100"
+            required
+            value="{{ request.form.get('number_of_tracks') }}"
+          />
+          <br />
+        <label for="track">Tracks to base the recommendation on: </label>
+        <textarea 
+        name="numbers" 
+        rows="4" 
+        cols="50" 
+        pattern="^[0-9]+(,[0-9]+)*$" 
+        title="Enter comma-separated integers">
+      </textarea>
+      <br>
+        <button type="submit" name="action" value="generate">Generate</button>
+      </form>
+      {% if error %}
+        <p style="color: red;">{{ error }}</p>
+      {% endif %}
+      <br />
+
+      <h3>Adjust your mood</h3>
+      <h5>Select the values on the sliders</h5>
+
+      <form action="{{ url_for('barGenerate') }}" method="POST">
+          <label for="number_of_tracks">Number of tracks to recommend: </label>
+          <input
+            type="number"
+            id="number_of_tracks"
+            name="number_of_tracks"
+            min="1"
+            max="100"
+            required
+            value="{{ request.form.get('number_of_tracks') }}"
+          />
+          <br />
+          <br>
+
+        <label for="valueSliderSpeechiness">Speechiness: </label>
+        <input type="range" name="valueSliderSpeechiness" min="0" max="1" step="0.001" value="{{ speechiness }}" />
+        <br>
+
+        <label for="valueSliderInstrumentalness">Instrumentalness: </label>
+        <input type="range" name="valueSliderInstrumentalness" min="0" max="1" step="0.001" value="{{ instrumentalness }}" />
+        <br>
+
+        <label for="valueSliderLiveness">Liveness: </label>
+        <input type="range" name="valueSliderLiveness" min="0" max="1" step="0.001" value="{{ liveness }}" />
+        <br>
+
+        <label for="valueSliderValence">Valence: </label>
+        <input type="range" name="valueSliderValence" min="0" max="1" step="0.001" value="{{ valence }}" />
+        <br>
+
+        <label for="valueSliderDanceability">Danceability: </label>
+        <input type="range" name="valueSliderDanceability" min="0" max="1" step="0.001" value="{{ danceability }}" />
+        <br>
+
+        <label for="valueSliderEnergy">Energy: </label>
+        <input type="range" name="valueSliderEnergy" min="0" max="1" step="0.001" value="{{ energy }}" />
+        <br>
+
+        <label for="valueSliderAcousticness">Acousticness: </label>
+        <input type="range" name="valueSliderAcousticness" min="0" max="1" step="0.001" value="{{ acousticness }}" />
+        <br>
+
+        <label for="valueSliderLoudness">Loudness: </label>
+        <input type="range" name="valueSliderLoudness" min="-60" max="-1" step="0.1" value="{{ loudness }}" />
+        <br>
+
+        <label for="valueSliderTempo">Tempo: </label>
+        <input type="range" name="valueSliderTempo" min="1" max="160" step="0.1" value="{{ tempo }}" />
+        <br>
+
+        <button type="submit">Generate</button>
+      </form>
+      <br />
+
+      <h3>Your listening history</h3>
+      <form action="{{ url_for('historyGenerate') }}" method="POST">
+        <form method="POST">
+          <label for="number_of_tracks">Number of tracks to recommend: </label>
+          <input
+            type="number"
+            id="number_of_tracks"
+            name="number_of_tracks"
+            min="1"
+            max="100"
+            required
+            value="{{ request.form.get('number_of_tracks') }}"
+          />
+          <br />
+        <button type="submit">Generate</button>
+      </form>
+    </form>
+      <br />
+
+      <h3>Your recent favourites</h3>
+      <form action="{{ url_for('favouritesGenerate') }}" method="POST">
+        <form method="POST">
+          <label for="number_of_tracks">Number of tracks to recommend: </label>
+          <input
+            type="number"
+            id="number_of_tracks"
+            name="number_of_tracks"
+            min="1"
+            max="100"
+            required
+            value="{{ request.form.get('number_of_tracks') }}"
+          />
+          <br />
+        <button type="submit">Generate</button>
+      </form>
+    </form>
+      <br />
+
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+    <footer>
+      <p>
+        &copy; 2023 by Maciej Kuczynski for Czestochowa University of
+        Technology. All rights reserved.
+      </p>
+    </footer>
+  </body>
+</html>

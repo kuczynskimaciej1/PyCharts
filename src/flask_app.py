@@ -4,10 +4,12 @@ import login_global_var
 import dl_data
 import learning_set
 import ai
-import recommendation
+import ai_recommendation
+import no_ai_recommendation
 import ul_data
 import ai_global_var
 import pandas as pd
+import maths_and_stats
 
 def checkAccess(): ###TODO add to particular functions
     if login_global_var.user_info['display_name'] == "kuczynskimaciej1":
@@ -54,6 +56,11 @@ def flaskInit():
         return response
     
 
+    @app.route('/share_feedback')
+    def shareFeedback():
+        return redirect("https://forms.gle/ySkaayeJWKhgRVRN8")
+    
+
     @app.route('/admin_dashboard')
     def adminDashboard():
         return render_template("admin_dashboard.html", user_info = login_global_var.user_info)
@@ -79,23 +86,42 @@ def flaskInit():
 
     @app.route('/user_statistics')
     def userStatistics():
-        return render_template("user_statistics.html", user_info = login_global_var.user_info)
+        numerical_statistics = maths_and_stats.calculateUserNumericals()
+        return render_template("user_statistics.html", numerical_statistics = numerical_statistics, user_info = login_global_var.user_info)
     
 
-    @app.route('/generate_options')
-    def generateOptions():
-        return render_template("generate_options.html", user_info = login_global_var.user_info)
+    @app.route('/ai_generate_options')
+    def aiGenerateOptions():
+        return render_template("ai_generate_options.html", user_info = login_global_var.user_info)
+    
+
+    @app.route('/no_ai_generate_options')
+    def noAiGenerateOptions():
+        return render_template("no_ai_generate_options.html", user_info = login_global_var.user_info)
     
 
     @app.route('/single_generate', methods=["GET", "POST"])
     def singleGenerate():
         number_of_tracks = request.form.get('number_of_tracks')
         track = request.form.get('track')
-        recommendations = recommendation.getRecommendation(int(track), int(number_of_tracks))
+        recommendations = ai_recommendation.getTrackRecommendation(int(track), int(number_of_tracks))
+        recommendations_data = recommendations.to_dict(orient='records')
+        session['recommendations'] = recommendations_data
+
+        no_ai_playlist = no_ai_recommendation.getNoAITrackRecommendation(int(track), int(number_of_tracks))
+        correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+        return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
+    
+
+    @app.route('/single_no_ai_generate', methods=["GET", "POST"])
+    def singleNoAiGenerate():
+        number_of_tracks = request.form.get('number_of_tracks')
+        track = request.form.get('track')
+        recommendations = no_ai_recommendation.getNoAITrackRecommendation(int(track), int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
-    
+
 
     @app.route('/vector_generate', methods=["GET", "POST"])
     def vectorGenerate():
@@ -114,13 +140,41 @@ def flaskInit():
         vector = validate_input(input_numbers)
         
         if vector is not None:
-            # Do something with the validated_numbers, like saving as a vector
-            recommendations = recommendation.getVectorRecommendation(vector, int(number_of_tracks))
+            recommendations = ai_recommendation.getVectorRecommendation(vector, int(number_of_tracks))
+            recommendations_data = recommendations.to_dict(orient='records')
+            session['recommendations'] = recommendations_data
+
+            no_ai_playlist = no_ai_recommendation.getNoAIVectorRecommendation(vector, int(number_of_tracks))
+            correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+            return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
+        else:
+            return "Invalid input. Please enter integers in the range 1 to 20496, separated by commas."
+        
+    
+    @app.route('/vector_no_ai_generate', methods=["GET", "POST"])
+    def vectorNoAiGenerate():
+        def validate_input(input_str):
+            try:
+                numbers = [int(num.strip()) for num in input_str.split(',')]
+                if all(1 <= num <= 20496 for num in numbers):
+                    return numbers
+                else:
+                    return None
+            except ValueError:
+                return None
+        
+        number_of_tracks = request.form.get('number_of_tracks')
+        input_numbers = request.form['numbers']
+        vector = validate_input(input_numbers)
+        
+        if vector is not None:
+            recommendations = no_ai_recommendation.getNoAIVectorRecommendation(vector, int(number_of_tracks))
             recommendations_data = recommendations.to_dict(orient='records')
             session['recommendations'] = recommendations_data
             return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
         else:
             return "Invalid input. Please enter integers in the range 1 to 20496, separated by commas."
+
 
     @app.route('/bar_generate', methods=["GET", "POST"])
     def barGenerate():
@@ -134,29 +188,74 @@ def flaskInit():
                       float(request.form.get('valueSliderAcousticness')), 
                       float(request.form.get('valueSliderLoudness')), 
                       float(request.form.get('valueSliderTempo'))]
-        recommendations = recommendation.getBarRecommendation(parameters, int(number_of_tracks))
+        recommendations = ai_recommendation.getBarRecommendation(parameters, int(number_of_tracks))
+        recommendations_data = recommendations.to_dict(orient='records')
+        session['recommendations'] = recommendations_data
+
+        no_ai_playlist = no_ai_recommendation.getNoAIBarRecommendation(parameters, int(number_of_tracks))
+        correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+        return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
+    
+
+    @app.route('/bar_no_ai_generate', methods=["GET", "POST"])
+    def barNoAiGenerate():
+        number_of_tracks = request.form.get('number_of_tracks')
+        parameters = [float(request.form.get('valueSliderSpeechiness')), 
+                      float(request.form.get('valueSliderInstrumentalness')), 
+                      float(request.form.get('valueSliderLiveness')), 
+                      float(request.form.get('valueSliderValence')), 
+                      float(request.form.get('valueSliderDanceability')), 
+                      float(request.form.get('valueSliderEnergy')), 
+                      float(request.form.get('valueSliderAcousticness')), 
+                      float(request.form.get('valueSliderLoudness')), 
+                      float(request.form.get('valueSliderTempo'))]
+        recommendations = no_ai_recommendation.getNoAIBarRecommendation(parameters, int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
-    
+
 
     @app.route('/history_generate', methods=["GET", "POST"])
     def historyGenerate():
         number_of_tracks = request.form.get('number_of_tracks')
-        recommendations = recommendation.getHistoryRecommendation(int(number_of_tracks))
+        recommendations = ai_recommendation.getHistoryRecommendation(int(number_of_tracks))
+        recommendations_data = recommendations.to_dict(orient='records')
+        session['recommendations'] = recommendations_data
+
+        no_ai_playlist = no_ai_recommendation.getNoAIHistoryRecommendation(int(number_of_tracks))
+        correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+        return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
+    
+
+    @app.route('/history_no_ai_generate', methods=["GET", "POST"])
+    def historyNoAiGenerate():
+        number_of_tracks = request.form.get('number_of_tracks')
+        recommendations = no_ai_recommendation.getNoAIHistoryRecommendation(int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data 
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
-    
+
 
     @app.route('/favourites_generate', methods=["GET", "POST"])
     def favouritesGenerate():
         number_of_tracks = request.form.get('number_of_tracks')
-        recommendations = recommendation.getFavouritesRecommendation(int(number_of_tracks))
+        recommendations = ai_recommendation.getFavouritesRecommendation(int(number_of_tracks))
+        recommendations_data = recommendations.to_dict(orient='records')
+        session['recommendations'] = recommendations_data
+
+        no_ai_playlist = no_ai_recommendation.getNoAIFavouritesRecommendation(int(number_of_tracks))
+        correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+        return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
+    
+
+    @app.route('/favourites_no_ai_generate', methods=["GET", "POST"])
+    def favouritesNoAiGenerate():
+        number_of_tracks = request.form.get('number_of_tracks')
+        recommendations = no_ai_recommendation.getNoAIFavouritesRecommendation(int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data 
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
-    
+
 
     @app.route('/embeddings')
     def embeddings():

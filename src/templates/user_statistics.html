@@ -1,1 +1,42 @@
-User statistics
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Maciej Kuczynski" />
+    <title>PyCharts</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>Welcome to PyCharts, {{ user_info['display_name'] }}!</h1>
+    </header>
+
+    <h3>Your numerical statistics:</h3>
+    <ul>
+      <li>Speechiness: {{ numerical_statistics[0] }}</li>
+      <li>Instrumentalness: {{ numerical_statistics[1] }}</li>
+      <li>Liveness: {{ numerical_statistics[2] }}</li>
+      <li>Valence: {{ numerical_statistics[3] }}</li>
+      <li>Danceability: {{ numerical_statistics[4] }}</li>
+      <li>Energy: {{ numerical_statistics[5] }}</li>
+      <li>Acousticness: {{ numerical_statistics[6] }}</li>
+      <li>Loudness: {{ numerical_statistics[7] }}</li>
+      <li>Tempo: {{ numerical_statistics[8] }}</li>
+    </ul>
+
+    <br />
+    <br />
+    <br />
+    <footer>
+      <p>
+        &copy; 2023 by Maciej Kuczynski for Czestochowa University of
+        Technology. All rights reserved.
+      </p>
+    </footer>
+  </body>
+</html>

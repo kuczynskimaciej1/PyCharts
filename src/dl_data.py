@@ -15,7 +15,6 @@ def getUserPlayback(limit):
 
 def getUserFavourites(limit):
     favourites = login_global_var.spotify.current_user_top_tracks(limit = limit)
-    #print(favourites)
     tracks = []
     for item in favourites['items']:
         tracks.append(Track(item['uri'], 
