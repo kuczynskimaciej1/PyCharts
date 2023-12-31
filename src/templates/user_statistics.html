@@ -17,17 +17,34 @@
     </header>
 
     <h3>Your numerical statistics:</h3>
-    <ul>
-      <li>Speechiness: {{ numerical_statistics[0] }}</li>
-      <li>Instrumentalness: {{ numerical_statistics[1] }}</li>
-      <li>Liveness: {{ numerical_statistics[2] }}</li>
-      <li>Valence: {{ numerical_statistics[3] }}</li>
-      <li>Danceability: {{ numerical_statistics[4] }}</li>
-      <li>Energy: {{ numerical_statistics[5] }}</li>
-      <li>Acousticness: {{ numerical_statistics[6] }}</li>
-      <li>Loudness: {{ numerical_statistics[7] }}</li>
-      <li>Tempo: {{ numerical_statistics[8] }}</li>
-    </ul>
+    <div id="nice-stats">
+      <li>Speechiness</li>
+      <li>{{ numerical_statistics[0] }}</li>
+
+      <li>Instrumentalness</li>
+      <li>{{ numerical_statistics[1] }}</li>
+
+      <li>Liveness</li>
+      <li>{{ numerical_statistics[2] }}</li>
+
+      <li>Valence</li>
+      <li>{{ numerical_statistics[3] }}</li>
+
+      <li>Danceability</li>
+      <li>{{ numerical_statistics[4] }}</li>
+
+      <li>Energy</li>
+      <li>{{ numerical_statistics[5] }}</li>
+
+      <li>Acousticness</li>
+      <li>{{ numerical_statistics[6] }}</li>
+
+      <li>Loudness</li>
+      <li>{{ numerical_statistics[7] }}</li>
+
+      <li>Tempo</li>
+      <li>{{ numerical_statistics[8] }}</li>
+    </div>
 
     <br />
     <br />

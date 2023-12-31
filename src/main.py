@@ -1,16 +1,12 @@
-from flask_app import flaskInit
+import flask_app
 import database
-
-def main():
-    if __name__ == "__main__":
-        app.run(debug = True)
-
-#app = flaskInit()
-#main()
+import database_global
 
 try:
-    connection, cursor = database.setupDatabseConnection()
-    app = flaskInit()
-    main()
+    database_global.db_connection, database_global.cursor = database.setupDatabseConnection()
 finally:
-    database.closeDatabaseConnection(connection, cursor)
+    database.closeDatabaseConnection(database_global.db_connection, database_global.cursor)
+
+app = flask_app.flaskInit()
+if __name__ == "__main__":
+    app.run(debug = True)

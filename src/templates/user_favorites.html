@@ -16,16 +16,26 @@
       <h1>Welcome to PyCharts, {{ user_info['display_name'] }}!</h1>
     </header>
 
-    <h3>Your recent favourites:</h3>
-    <ul>
-      {% for track in tracks %}
-      <li>
-        <img src="{{ track.image }}" alt="{{ track.name }} album cover" />
-        <p>{{ track.name }} - {{ track.artist }} ({{ track.album }})</p>
-      </li>
-      {% endfor %}
-    </ul>
-
+    <div id="recent-favourites">
+      <h3>Your recent favourites:</h3>
+      <ul id="nice-list">
+        {% for track in tracks %}
+        <li>
+          <div id="index">{{ loop.index }}</div>
+          <img src="{{ track.image }}" alt="{{ track.name }} album cover" />
+          <div id="song-info">
+            <p id="title">{{ track.name[0] }}</p>
+            <p id="artist">{{ track.artist[0] }}</p>
+            <p id="album">{{ track.album[0] }}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
     <footer>
       <p>
         &copy; 2023 by Maciej Kuczynski for Czestochowa University of

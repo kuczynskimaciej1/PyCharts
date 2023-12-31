@@ -13,74 +13,80 @@
 
   <body>
     <header>
+      <div id="header_body">
       <h1>Welcome to PyCharts, {{ user_info['display_name'] }}!</h1>
+      </div>
     </header>
 
     <section>
-      <p>Login successful</p>
-      <form action="{{ url_for('logout') }}" method="GET">
-        <button type="submit">Log out</button>
-      </form>
-      <br />
-      <form action="{{ url_for('shareFeedback') }}" method="GET">
-        <button type="submit">Share feedback</button>
-      </form>
-      <br />
-      <br />
-      <p>User options:</p>
-      <br />
+      <div id="login_options">
+        <p>Login successful!</p>
+        <form action="{{ url_for('logout') }}" method="GET">
+          <button type="submit" id="nice-button">Log out</button>
+        </form>
+        <br>
+        <form action="{{ url_for('shareFeedback') }}" method="GET">
+          <button type="submit" id="nice-button">Share feedback</button>
+        </form>
+      </div>
 
-      <form action="{{ url_for('userPlayback') }}" method="GET">
-        <button type="submit">Your last playback</button>
-      </form>
       <br />
+      <br />
+      <div id="user">
+        <p>User options:</p>
+        <form action="{{ url_for('browseDataset') }}" method="GET">
+          <button type="submit" id="nice-button">Browse the dataset</button>
+        </form>
+<br>
+        <form action="{{ url_for('userPlayback') }}" method="GET">
+          <button type="submit" id="nice-button">Your last playback</button>
+        </form>
+<br>
+        <form action="{{ url_for('userFavorites') }}" method="GET">
+          <button type="submit" id="nice-button">Your favourites from the last 30 days</button>
+        </form>
+<br>
+        <form action="{{ url_for('userStatistics') }}" method="GET">
+          <button type="submit" id="nice-button">See your numerical statistics</button>
+        </form>
+<br>
+        <form action="{{ url_for('aiGenerateOptions') }}" method="GET">
+          <button type="submit" id="nice-button">
+            Generate your own recommendation WITH AI
+          </button>
+        </form>
+<br>
+        <form action="{{ url_for('noAiGenerateOptions') }}" method="GET">
+          <button type="submit" id="nice-button">
+            Generate your own recommendation WITHOUT AI
+          </button>
+        </form>
+      <br />
+      <br />
+      <div id="admin">
+        <p>Admin options:</p>
+        <form action="{{ url_for('embeddings') }}" method="GET">
+          <button type="submit" id="nice-button">
+            Train the embeddings for albums and artists
+          </button>
+        </form>
+<br>
+        <form action="{{ url_for('dataset') }}" method="GET">
+          <button type="submit" id="nice-button">Prepare the dataset</button>
+        </form>
+<br>
+        <form action="{{ url_for('moodTraining') }}" method="GET">
+          <button type="submit" id="nice-button">Train the numerical set of values</button>
+        </form>
+<br>
+        <form action="{{ url_for('fullTraining') }}" method="GET">
+          <button type="submit" id="nice-button">Train the full neural network</button>
+        </form>
+<br>
+<br>
+<br>
 
-      <form action="{{ url_for('userFavorites') }}" method="GET">
-        <button type="submit">Your favourites from the last 30 days</button>
-      </form>
-      <br />
-
-      <form action="{{ url_for('userStatistics') }}" method="GET">
-        <button type="submit">See your numerical statistics</button>
-      </form>
-      <br />
-
-      <form action="{{ url_for('aiGenerateOptions') }}" method="GET">
-        <button type="submit">Generate your own recommendation WITH AI</button>
-      </form>
-      <br />
-
-      <form action="{{ url_for('noAiGenerateOptions') }}" method="GET">
-        <button type="submit">
-          Generate your own recommendation WITHOUT AI
-        </button>
-      </form>
-      <br />
-      <br />
-      <p>Admin options:</p>
-      <br />
-
-      <form action="{{ url_for('embeddings') }}" method="GET">
-        <button type="submit">
-          Train the embeddings for albums and artists
-        </button>
-      </form>
-      <br />
-
-      <form action="{{ url_for('dataset') }}" method="GET">
-        <button type="submit">Prepare the dataset</button>
-      </form>
-      <br />
-
-      <form action="{{ url_for('moodTraining') }}" method="GET">
-        <button type="submit">Train the numerical set of values</button>
-      </form>
-      <br />
-
-      <form action="{{ url_for('fullTraining') }}" method="GET">
-        <button type="submit">Train the full neural network</button>
-      </form>
-      <br />
+      </div>
     </section>
 
     <footer>

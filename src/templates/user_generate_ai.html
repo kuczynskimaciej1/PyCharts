@@ -16,21 +16,31 @@
       <h1>Welcome to PyCharts, {{ user_info['display_name'] }}!</h1>
     </header>
 
-    <h3>Your generated recommendation:</h3>
-    <ul>
-      {% for index, row in recommendations.iterrows() %}
-      <li>
-        <p>{{ row['Track'] }} - {{ row['Artist'] }} ({{ row['Album'] }})</p>
-      </li>
-      {% endfor %}
-    </ul>
+    <div id="recent-favourites">
+      <h3>Your generated recommendation:</h3>
+      <ul id="nice-list">
+        {% for index, row in recommendations.iterrows() %}
+        <li>
+          <div id="index">{{ loop.index }}</div>
+          <div id="song-info">
+            <p id="title">{{ row['Track'] }}</p>
+            <p id="artist">{{ row['Artist'] }}</p>
+            <p id="album">{{ row['Album'] }}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
 
     <br />
     <form action="{{ url_for('uploadToAccount') }}" method="POST">
       <label for="playlist_name">Playlist Name: </label>
       <input type="text" id="playlist_name" name="playlist_name" required />
       <br />
-      <button type="submit">Upload the playlist to your Spotify account</button>
+      <br />
+      <button type="submit" id="nice-button">
+        Upload the playlist to your Spotify account
+      </button>
     </form>
     <br />
     <h4>

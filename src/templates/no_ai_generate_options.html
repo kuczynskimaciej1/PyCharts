@@ -38,15 +38,17 @@
           type="number"
           id="track"
           name="track"
-          min="1"
-          max="20594"
+          min="0"
+          max="20593"
           required
           value="{{ request.form.get('track') }}"
         />
         <br>
-        <button type="submit">Generate</button>
+        <br>
+        <button type="submit" id="nice-button">Generate</button>
       </form>
       <br />
+      <br>
 
       <h3>Vector recommendation</h3>
 
@@ -66,21 +68,22 @@
         <label for="track">Tracks to base the recommendation on: </label>
         <textarea 
         name="numbers" 
-        rows="4" 
+        rows="1" 
         cols="50" 
         pattern="^[0-9]+(,[0-9]+)*$" 
         title="Enter comma-separated integers">
       </textarea>
       <br>
-        <button type="submit" name="action" value="generate">Generate</button>
+      <br>
+        <button type="submit" name="action" value="generate" id="nice-button">Generate</button>
       </form>
       {% if error %}
         <p style="color: red;">{{ error }}</p>
       {% endif %}
       <br />
+      <br>
 
       <h3>Adjust your mood</h3>
-      <h5>Select the values on the sliders</h5>
 
       <form action="{{ url_for('barNoAiGenerate') }}" method="POST">
           <label for="number_of_tracks">Number of tracks to recommend: </label>
@@ -131,10 +134,13 @@
         <label for="valueSliderTempo">Tempo: </label>
         <input type="range" name="valueSliderTempo" min="1" max="160" step="0.1" value="{{ tempo }}" />
         <br>
+        <br>
 
-        <button type="submit">Generate</button>
+        <button type="submit" id="nice-button">Generate</button>
       </form>
+      <br>
       <br />
+      <br>
 
       <h3>Your listening history</h3>
       <form action="{{ url_for('historyNoAiGenerate') }}" method="POST">
@@ -150,10 +156,12 @@
             value="{{ request.form.get('number_of_tracks') }}"
           />
           <br />
-        <button type="submit">Generate</button>
+          <br>
+        <button type="submit" id="nice-button">Generate</button>
       </form>
     </form>
       <br />
+      <br>
 
       <h3>Your recent favourites</h3>
       <form action="{{ url_for('favouritesNoAiGenerate') }}" method="POST">
@@ -169,13 +177,10 @@
             value="{{ request.form.get('number_of_tracks') }}"
           />
           <br />
-        <button type="submit">Generate</button>
+          <br>
+        <button type="submit" id="nice-button">Generate</button>
       </form>
     </form>
-      <br />
-
-      <br />
-      <br />
       <br />
       <br />
       <br />

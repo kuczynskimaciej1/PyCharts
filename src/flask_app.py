@@ -10,6 +10,7 @@ import ul_data
 import ai_global_var
 import pandas as pd
 import maths_and_stats
+import database
 
 def checkAccess(): ###TODO add to particular functions
     if login_global_var.user_info['display_name'] == "kuczynskimaciej1":
@@ -21,6 +22,7 @@ def checkAccess(): ###TODO add to particular functions
 def flaskInit():
     app = Flask(__name__)
     app.secret_key = token_hex(16)
+
 
     @app.route('/')
     def initialPage():
@@ -39,7 +41,7 @@ def flaskInit():
         session['token_info'] = login_global_var.token_info
         login_global_var.spotify.auth = login_global_var.token_info['access_token']
         login_global_var.user_info = login_global_var.spotify.me()
-        
+        #database.addUserToDatabase()
         return redirect(url_for('adminDashboard'))
     
 
@@ -71,6 +73,12 @@ def flaskInit():
         return render_template("user_dashboard.html", user_info = login_global_var.user_info)
     
 
+    @app.route('/browse_dataset')
+    def browseDataset():
+        data = ai_global_var.presentation_features.to_html(classes="table table-bordered", index=True)
+        return render_template("browse_dataset.html", data = data, user_info = login_global_var.user_info)
+
+
     @app.route('/user_favorites')
     def userFavorites():
         tracks = dl_data.getUserFavourites(50)
@@ -87,6 +95,8 @@ def flaskInit():
     @app.route('/user_statistics')
     def userStatistics():
         numerical_statistics = maths_and_stats.calculateUserNumericals()
+        for i, element in enumerate(numerical_statistics):
+            numerical_statistics[i] = round(element, 5)
         return render_template("user_statistics.html", numerical_statistics = numerical_statistics, user_info = login_global_var.user_info)
     
 
@@ -128,7 +138,7 @@ def flaskInit():
         def validate_input(input_str):
             try:
                 numbers = [int(num.strip()) for num in input_str.split(',')]
-                if all(1 <= num <= 20496 for num in numbers):
+                if all(0 <= num <= 20593 for num in numbers):
                     return numbers
                 else:
                     return None
@@ -156,7 +166,7 @@ def flaskInit():
         def validate_input(input_str):
             try:
                 numbers = [int(num.strip()) for num in input_str.split(',')]
-                if all(1 <= num <= 20496 for num in numbers):
+                if all(0 <= num <= 20593 for num in numbers):
                     return numbers
                 else:
                     return None
@@ -278,7 +288,7 @@ def flaskInit():
     @app.route('/dataset')
     def dataset():
         learning_set.buildDefaultLearningSet()
-        return render_template("dataset.html", user_info = login_global_var.user_info)
+        return "Dataset built and saved."
     
     
     @app.route('/upload_playlist', methods=["POST"])

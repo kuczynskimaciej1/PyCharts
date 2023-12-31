@@ -2,7 +2,6 @@ from scipy.stats import pearsonr
 import numpy as np
 import ai_global_var
 import dl_data
-import pandas as pd
 
 def calculateCorrelation(playlist1, playlist2):
     playlist1_data_flat = playlist1[ai_global_var.all_features_list].values.flatten()
