@@ -41,7 +41,7 @@ def flaskInit():
         session['token_info'] = login_global_var.token_info
         login_global_var.spotify.auth = login_global_var.token_info['access_token']
         login_global_var.user_info = login_global_var.spotify.me()
-        #database.addUserToDatabase()
+        database.addUserToDatabase()
         return redirect(url_for('adminDashboard'))
     
 

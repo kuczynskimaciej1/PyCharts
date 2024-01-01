@@ -1,36 +1,26 @@
 -- Create User table
 CREATE TABLE User (
-    user_id INT PRIMARY KEY,
-    spotify_nickname VARCHAR(255)
+    user_id INTEGER PRIMARY KEY,
+    spotify_name TEXT,
+    uri TEXT
 );
 
 -- Create Playlist table
 CREATE TABLE Playlist (
-    playlist_id INT PRIMARY KEY,
-    user_id INT,
-    playlist_name VARCHAR(255),
-    created_at TIMESTAMP,
+    playlist_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    playlist_name TEXT,
+    date_of_creation DATE,
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
 -- Create Track table
 CREATE TABLE Track (
-    track_id INT PRIMARY KEY,
-    playlist_id INT,
-    track_name VARCHAR(255),
-    artist VARCHAR(255),
-    duration TIME,
+    track_id INTEGER PRIMARY KEY,
+    playlist_id INTEGER,
+    mark_given INTEGER,
+    rank_on_list INTEGER,
+    uri TEXT,
+    dataset_id INTEGER,
     FOREIGN KEY (playlist_id) REFERENCES Playlist(playlist_id)
 );
-
--- Create PlaylistTrack table
-CREATE TABLE PlaylistTrack (
-    playlist_id INT,
-    track_id INT,
-    PRIMARY KEY (playlist_id, track_id),
-    FOREIGN KEY (playlist_id) REFERENCES Playlist(playlist_id),
-    FOREIGN KEY (track_id) REFERENCES Track(track_id)
-);
-
---
-GRANT ALL PRIVILEGES ON pycharts TO mkuczyns@localhost;track
