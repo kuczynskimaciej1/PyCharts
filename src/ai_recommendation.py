@@ -1,6 +1,8 @@
 import numpy as np
 import ai_global_var
 import dl_data
+import database
+import database_global
 
 def getTrackRecommendation(track_index, num_recommendations):
     input_track = ai_global_var.scaled_features[track_index].reshape(1, -1)
@@ -32,6 +34,7 @@ def getBarRecommendation(parameters, num_recommendations):
     recommended_tracks = ai_global_var.df.iloc[recommended_indices]
     print("Recommended Tracks:")
     print(recommended_tracks[['Track', 'Artist']])
+    print(database_global.user_id)
     return recommended_tracks
 
 
@@ -67,7 +70,8 @@ def getHistoryRecommendation(num_recommendations):
                         danceability_array.mean(), energy_array.mean(), 
                         acousticness_array.mean(), loudness_array.mean(), 
                         tempo_array.mean()])
-
+    
+    database_global.parameters = str(mean_track)
     recommended_tracks = getBarRecommendation(mean_track, num_recommendations)
     return recommended_tracks
 
@@ -105,5 +109,6 @@ def getFavouritesRecommendation(num_recommendations):
                         acousticness_array.mean(), loudness_array.mean(), 
                         tempo_array.mean()])
 
+    database_global.parameters = str(mean_track)
     recommended_tracks = getBarRecommendation(mean_track, num_recommendations)
     return recommended_tracks

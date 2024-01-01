@@ -3,7 +3,8 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import ai_global_var
 import dl_data
-
+import database
+import database_global
 
 def getNoAITrackRecommendation(track_index, num_recommendations):
     similarity_matrix = cosine_similarity(ai_global_var.mood_features, ai_global_var.mood_features)
@@ -71,6 +72,7 @@ def getNoAIHistoryRecommendation(num_recommendations):
                         acousticness_array.mean(), loudness_array.mean(), 
                         tempo_array.mean()])
     
+    database_global.parameters = database.vectorToString(mean_track)
     recommended_tracks = getNoAIBarRecommendation(mean_track, num_recommendations)
     return recommended_tracks
 
@@ -108,5 +110,6 @@ def getNoAIFavouritesRecommendation(num_recommendations):
                         acousticness_array.mean(), loudness_array.mean(), 
                         tempo_array.mean()])
 
+    database_global.parameters = database.vectorToString(mean_track)
     recommended_tracks = getNoAIBarRecommendation(mean_track, num_recommendations)
     return recommended_tracks

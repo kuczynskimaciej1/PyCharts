@@ -11,6 +11,7 @@ import ai_global_var
 import pandas as pd
 import maths_and_stats
 import database
+import database_global
 
 def checkAccess(): ###TODO add to particular functions
     if login_global_var.user_info['display_name'] == "kuczynskimaciej1":
@@ -120,6 +121,10 @@ def flaskInit():
 
         no_ai_playlist = no_ai_recommendation.getNoAITrackRecommendation(int(track), int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+
+        database_global.generation_method = "single"
+        database_global.parameters = track
+
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
     
 
@@ -130,6 +135,10 @@ def flaskInit():
         recommendations = no_ai_recommendation.getNoAITrackRecommendation(int(track), int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
+
+        database_global.generation_method = "singleNoAi"
+        database_global.parameters = track
+
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
 
 
@@ -156,6 +165,10 @@ def flaskInit():
 
             no_ai_playlist = no_ai_recommendation.getNoAIVectorRecommendation(vector, int(number_of_tracks))
             correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+
+            database_global.generation_method = "vector"
+            database_global.parameters = database.vectorToString(vector)
+
             return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
         else:
             return "Invalid input. Please enter integers in the range 1 to 20496, separated by commas."
@@ -181,6 +194,10 @@ def flaskInit():
             recommendations = no_ai_recommendation.getNoAIVectorRecommendation(vector, int(number_of_tracks))
             recommendations_data = recommendations.to_dict(orient='records')
             session['recommendations'] = recommendations_data
+
+            database_global.generation_method = "vectorNoAi"
+            database_global.parameters = database.vectorToString(vector)
+
             return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
         else:
             return "Invalid input. Please enter integers in the range 1 to 20496, separated by commas."
@@ -202,6 +219,9 @@ def flaskInit():
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
 
+        database_global.generation_method = "bar"
+        database_global.parameters = database.vectorToString(parameters)
+
         no_ai_playlist = no_ai_recommendation.getNoAIBarRecommendation(parameters, int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
@@ -222,6 +242,10 @@ def flaskInit():
         recommendations = no_ai_recommendation.getNoAIBarRecommendation(parameters, int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
+
+        database_global.generation_method = "barNoAi"
+        database_global.parameters = parameters
+
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
 
 
@@ -234,6 +258,9 @@ def flaskInit():
 
         no_ai_playlist = no_ai_recommendation.getNoAIHistoryRecommendation(int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+
+        database_global.generation_method = "history"
+
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
     
 
@@ -242,7 +269,8 @@ def flaskInit():
         number_of_tracks = request.form.get('number_of_tracks')
         recommendations = no_ai_recommendation.getNoAIHistoryRecommendation(int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
-        session['recommendations'] = recommendations_data 
+        session['recommendations'] = recommendations_data
+        database_global.generation_method = "historyNoAi"
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
 
 
@@ -255,6 +283,9 @@ def flaskInit():
 
         no_ai_playlist = no_ai_recommendation.getNoAIFavouritesRecommendation(int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+
+        database_global.generation_method = "favourites"
+
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
     
 
@@ -263,7 +294,8 @@ def flaskInit():
         number_of_tracks = request.form.get('number_of_tracks')
         recommendations = no_ai_recommendation.getNoAIFavouritesRecommendation(int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
-        session['recommendations'] = recommendations_data 
+        session['recommendations'] = recommendations_data
+        database_global.generation_method = "favouritesNoAi"
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
 
 
@@ -296,6 +328,10 @@ def flaskInit():
         playlist_name = request.form.get('playlist_name')
         recommendations_data = session.get('recommendations', [])
         recommendations = pd.DataFrame(recommendations_data)
+
+        database.addPlaylistToDatabase(playlist_name, database_global.generation_method, database_global.parameters)
+        #for track in recommendations:
+
         ul_data.uploadPlaylist(playlist_name, recommendations)
         return f"Playlist '{playlist_name}' created successfully!"
     
