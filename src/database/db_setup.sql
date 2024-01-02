@@ -15,6 +15,7 @@ CREATE TABLE Playlist (
     playlist_internal_id TEXT,
     generation_method TEXT,
 	parameters TEXT,
+    correlation REAL,
     FOREIGN KEY (user_id) REFERENCES User(user_internal_id)
 );
 

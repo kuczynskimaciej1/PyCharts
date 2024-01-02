@@ -151,6 +151,7 @@ def flaskInit():
         no_ai_playlist = no_ai_recommendation.getNoAITrackRecommendation(int(track), int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
 
+        database_global.correlation = correlation
         database_global.generation_method = "single"
         database_global.parameters = track
 
@@ -195,6 +196,7 @@ def flaskInit():
             no_ai_playlist = no_ai_recommendation.getNoAIVectorRecommendation(vector, int(number_of_tracks))
             correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
 
+            database_global.correlation = correlation
             database_global.generation_method = "vector"
             database_global.parameters = database.vectorToString(vector)
 
@@ -248,6 +250,7 @@ def flaskInit():
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
 
+        database_global.correlation = correlation
         database_global.generation_method = "bar"
         database_global.parameters = database.vectorToString(parameters)
 
@@ -288,6 +291,7 @@ def flaskInit():
         no_ai_playlist = no_ai_recommendation.getNoAIHistoryRecommendation(int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
 
+        database_global.correlation = correlation
         database_global.generation_method = "history"
 
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
@@ -313,6 +317,7 @@ def flaskInit():
         no_ai_playlist = no_ai_recommendation.getNoAIFavouritesRecommendation(int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
 
+        database_global.correlation = correlation
         database_global.generation_method = "favourites"
 
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)

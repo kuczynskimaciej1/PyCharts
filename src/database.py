@@ -72,11 +72,12 @@ def addPlaylistToDatabase(playlist_name, generation_method, parameters):
 
     user_id = database_global.user_id
     date_time = getDateAndTime()
+    correlation = database_global.correlation
     internal_id = generateInternalId()
     database_global.playlist_id = internal_id
 
-    query_add_to_database = "INSERT INTO playlist (user_id, playlist_name, date_of_creation, playlist_internal_id, generation_method, parameters) VALUES (?, ?, ?, ?, ?, ?)"
-    cursor.execute(query_add_to_database, (user_id, playlist_name, date_time, internal_id, generation_method, parameters))
+    query_add_to_database = "INSERT INTO playlist (user_id, playlist_name, date_of_creation, playlist_internal_id, generation_method, parameters, correlation) VALUES (?, ?, ?, ?, ?, ?, ?)"
+    cursor.execute(query_add_to_database, (user_id, playlist_name, date_time, internal_id, generation_method, parameters, correlation))
     commitAndCloseDatabaseConnection(connection, cursor)
 
 
