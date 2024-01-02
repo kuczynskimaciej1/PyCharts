@@ -50,3 +50,4 @@ zope.event==5.0
 zope.interface==6.1
 TensorFlow==2.15.0
 Keras==2.15.0
+Matplotlib==3.5.1
