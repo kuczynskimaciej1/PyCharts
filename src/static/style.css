@@ -202,3 +202,23 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+#playlist_title {
+    text-align: center;
+    align-items: center;
+}
+
+#date_of_creation {
+    text-align: center;
+    align-items: center;
+}
+
+#generation_method {
+    text-align: center;
+    align-items: center;
+}
+
+#playlist_parameters {
+    text-align: center;
+    align-items: center;
+}

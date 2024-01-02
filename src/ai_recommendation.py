@@ -1,7 +1,6 @@
 import numpy as np
 import ai_global_var
 import dl_data
-import database
 import database_global
 
 def getTrackRecommendation(track_index, num_recommendations):
@@ -9,6 +8,7 @@ def getTrackRecommendation(track_index, num_recommendations):
     reconstructed_track = ai_global_var.ai_model.predict(input_track)
     distances = np.linalg.norm(ai_global_var.scaled_features - reconstructed_track, axis=1)
     recommended_indices = np.argsort(distances)[1:num_recommendations + 1]
+    database_global.recommended_indices = recommended_indices
     recommended_tracks = ai_global_var.df.iloc[recommended_indices]
     print(recommended_tracks)
     return recommended_tracks
@@ -20,6 +20,7 @@ def getVectorRecommendation(track_indices, num_recommendations):
     reconstructed_mean_track = ai_global_var.ai_model.predict(mean_track)
     distances = np.linalg.norm(ai_global_var.scaled_features - reconstructed_mean_track, axis=1)
     recommended_indices = np.argsort(distances)[:num_recommendations]
+    database_global.recommended_indices = recommended_indices
     recommended_tracks = ai_global_var.df.iloc[recommended_indices]
     print("Recommended Tracks:")
     print(recommended_tracks[['Track', 'Artist']])
@@ -31,6 +32,7 @@ def getBarRecommendation(parameters, num_recommendations):
     reconstructed_input_features = ai_global_var.ai_model_mood.predict(input_features)
     distances = np.linalg.norm(ai_global_var.scaled_mood_features - reconstructed_input_features, axis=1)
     recommended_indices = np.argsort(distances)[:num_recommendations]
+    database_global.recommended_indices = recommended_indices
     recommended_tracks = ai_global_var.df.iloc[recommended_indices]
     print("Recommended Tracks:")
     print(recommended_tracks[['Track', 'Artist']])

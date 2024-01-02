@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Maciej Kuczynski" />
+    <title>PyCharts</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>Welcome to PyCharts, {{ user_info['display_name'] }}!</h1>
+    </header>
+
+    <div id="recent-favourites">
+      <h3>Your recommended playlists:</h3>
+      <ul id="nice-list">
+        {% for playlist in playlists %}
+        <li>
+          <div id="index">{{ playlist[0] }}</div>
+          <div id="song-info">
+            <p id="playlist_title">{{ playlist[2] }}</p>
+            <p id="date_of_creation">{{ playlist[3] }}</p>
+            <p id="generation_method">{{ playlist[5] }}</p>
+            <p id="playlist_parameters">{{ playlist[6] }}</p>
+          </div>
+          <form action="{{ url_for('browseTracks') }}" method="POST">
+            <input type="hidden" name="playlist_id" value="{{ playlist[4] }}" />
+            <button id="nice-button">See tracks</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <footer>
+      <p>
+        &copy; 2023 by Maciej Kuczynski for Czestochowa University of
+        Technology. All rights reserved.
+      </p>
+    </footer>
+  </body>
+</html>

@@ -78,6 +78,35 @@ def flaskInit():
     def browseDataset():
         data = ai_global_var.presentation_features.to_html(classes="table table-bordered", index=True)
         return render_template("browse_dataset.html", data = data, user_info = login_global_var.user_info)
+    
+
+    @app.route('/browse_recommendations')
+    def browseRecommendations():
+        db_connection, cursor = database.setupDatabaseConnection()
+        playlist_query = cursor.execute('SELECT * FROM Playlist')
+        database_global.playlists = playlist_query.fetchall()
+        database.commitAndCloseDatabaseConnection(db_connection, cursor)
+        return render_template("browse_recommendations.html", playlists = database_global.playlists, user_info = login_global_var.user_info)
+
+
+    @app.route('/browse_tracks', methods=['GET', 'POST'])
+    def browseTracks():
+        playlist_id = request.form.get('playlist_id')
+        db_connection, cursor = database.setupDatabaseConnection()
+        tracks_query = cursor.execute('SELECT * FROM Track WHERE playlist_id = ?', (playlist_id,))
+        database_global.tracks = tracks_query.fetchall()
+        database.commitAndCloseDatabaseConnection(db_connection, cursor)
+        return render_template('browse_tracks.html', tracks=database_global.tracks, user_info = login_global_var.user_info)
+
+
+    @app.route('/rate_track', methods=['GET', 'POST'])
+    def rateTrack():
+        rate = request.form.get('track_rate')
+        track_id = request.form.get('track_id')
+        db_connection, cursor = database.setupDatabaseConnection()
+        cursor.execute('UPDATE track SET mark_given = ? WHERE track_id = ?', (rate, track_id))
+        database.commitAndCloseDatabaseConnection(db_connection, cursor)
+        return redirect(url_for('browseRecommendations'))
 
 
     @app.route('/user_favorites')
@@ -329,10 +358,12 @@ def flaskInit():
         recommendations_data = session.get('recommendations', [])
         recommendations = pd.DataFrame(recommendations_data)
 
-        database.addPlaylistToDatabase(playlist_name, database_global.generation_method, database_global.parameters)
-        #for track in recommendations:
+        track_uris = ul_data.uploadPlaylist(playlist_name, recommendations)
 
-        ul_data.uploadPlaylist(playlist_name, recommendations)
+        database.addPlaylistToDatabase(playlist_name, database_global.generation_method, database_global.parameters)
+        for index, track_uri in enumerate(track_uris):
+            database.addTrackToDatabase(None, index+1, track_uri, int(database_global.recommended_indices[index]), recommendations.iloc[index]['Track'], recommendations.iloc[index]['Artist'], recommendations.iloc[index]['Album'])
+
         return f"Playlist '{playlist_name}' created successfully!"
     
     return app

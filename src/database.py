@@ -22,7 +22,7 @@ def vectorToString(vector):
     return vector_string
 
 
-def setupDatabseConnection():
+def setupDatabaseConnection():
     db_connection = sqlite3.connect('database/database.db')
     cursor = db_connection.cursor()
     return db_connection, cursor
@@ -35,7 +35,7 @@ def commitAndCloseDatabaseConnection(connection, cursor):
 
 
 def createTables():
-    connection, cursor = setupDatabseConnection()
+    connection, cursor = setupDatabaseConnection()
 
     with open('database/db_setup.sql', 'r') as file:
         sql_commands = file.read()
@@ -45,7 +45,7 @@ def createTables():
 
 
 def addUserToDatabase():
-    connection, cursor = setupDatabseConnection()
+    connection, cursor = setupDatabaseConnection()
 
     username = login_global_var.user_info['display_name']
     uri = login_global_var.user_info['uri']
@@ -64,12 +64,11 @@ def addUserToDatabase():
         query_select_internal_id = "SELECT user_internal_id FROM user WHERE spotify_name = ? AND uri = ?"
         cursor.execute(query_select_internal_id, (username, uri))
         internal_id = cursor.fetchone()
-        print(f"INTERNAL ID: {internal_id}")
         database_global.user_id = internal_id[0]
 
 
 def addPlaylistToDatabase(playlist_name, generation_method, parameters):
-    connection, cursor = setupDatabseConnection()
+    connection, cursor = setupDatabaseConnection()
 
     user_id = database_global.user_id
     date_time = getDateAndTime()
@@ -81,11 +80,11 @@ def addPlaylistToDatabase(playlist_name, generation_method, parameters):
     commitAndCloseDatabaseConnection(connection, cursor)
 
 
-def addTrackToDatabase(mark_given, rank_on_list, uri, dataset_id):
-    connection, cursor = setupDatabseConnection()
+def addTrackToDatabase(mark_given, rank_on_list, uri, dataset_id, title, artist, album):
+    connection, cursor = setupDatabaseConnection()
 
     playlist_id = database_global.playlist_id
 
-    query_add_to_database = "INSERT INTO track (playlist_id, mark_given, rank_on_list, uri, dataset_id) VALUES (?, ?, ?, ?, ?)"
-    cursor.execute(query_add_to_database, (playlist_id, mark_given, rank_on_list, uri, dataset_id))
+    query_add_to_database = "INSERT INTO track (playlist_id, mark_given, rank_on_list, uri, dataset_id, title, artist, album) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    cursor.execute(query_add_to_database, (playlist_id, mark_given, rank_on_list, uri, dataset_id, title, artist, album))
     commitAndCloseDatabaseConnection(connection, cursor)

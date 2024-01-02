@@ -10,3 +10,4 @@ def uploadPlaylist(name, recommendations):
             track_uris.append(track_uri)
 
     login_global_var.spotify.playlist_add_items(playlist['id'], track_uris)
+    return track_uris
