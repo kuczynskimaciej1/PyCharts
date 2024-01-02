@@ -6,10 +6,12 @@ SPOTIPY_CLIENT_ID = "8e50c2065b334b158b7d20399aea45af"
 SPOTIPY_CLIENT_SECRET = "60b71876911648ff8ebbdd4a67f21293"
 SPOTIPY_REDIRECT_URI = "http://127.0.0.1:5000/after_login_setup"
 
-global token_info, user_info, spotify, sp_oauth
+global token_info, user_info, username, admin, spotify, sp_oauth
 
 token_info = None
 user_info = None
+username = None
+admin = False
 
 spotify = spotipy.Spotify(auth=None, 
                           client_credentials_manager=spotipy.oauth2.SpotifyClientCredentials(

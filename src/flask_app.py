@@ -13,12 +13,6 @@ import maths_and_stats
 import database
 import database_global
 
-def checkAccess(): ###TODO add to particular functions
-    if login_global_var.user_info['display_name'] == "kuczynskimaciej1":
-        return True
-    else:
-        return False
-
 
 def flaskInit():
     app = Flask(__name__)
@@ -42,8 +36,15 @@ def flaskInit():
         session['token_info'] = login_global_var.token_info
         login_global_var.spotify.auth = login_global_var.token_info['access_token']
         login_global_var.user_info = login_global_var.spotify.me()
+        login_global_var.username = login_global_var.user_info['display_name']
         database.addUserToDatabase()
-        return redirect(url_for('adminDashboard'))
+
+        if login_global_var.username == 'kuczynskimaciej1':
+            login_global_var.admin = True
+            return redirect(url_for('adminDashboard'))
+        else:
+            login_global_var.admin = False
+            return redirect(url_for('userDashboard'))
     
 
     @app.route('/logout')
@@ -66,7 +67,10 @@ def flaskInit():
 
     @app.route('/admin_dashboard')
     def adminDashboard():
-        return render_template("admin_dashboard.html", user_info = login_global_var.user_info)
+        if login_global_var.admin:
+            return render_template("admin_dashboard.html", user_info = login_global_var.user_info)
+        else:
+            return "Admin only functionality."
 
 
     @app.route('/user_dashboard')
@@ -250,12 +254,13 @@ def flaskInit():
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
 
-        database_global.correlation = correlation
         database_global.generation_method = "bar"
         database_global.parameters = database.vectorToString(parameters)
 
         no_ai_playlist = no_ai_recommendation.getNoAIBarRecommendation(parameters, int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
+        database_global.correlation = correlation
+        
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
     
 
@@ -335,26 +340,38 @@ def flaskInit():
 
     @app.route('/embeddings')
     def embeddings():
-        ai.trainEmbeddings()
-        return "Embeddings trained and saved."
+        if login_global_var.admin:
+            ai.trainEmbeddings()
+            return "Embeddings trained and saved."
+        else:
+            return "Admin only functionality." 
     
 
     @app.route('/mood_training')
     def moodTraining():
-        ai.teachNumerical(ai_global_var.scaled_mood_features)
-        return "Numerical (mood and acoustic) values trained and saved."
+        if login_global_var.admin:
+            ai.teachNumerical(ai_global_var.scaled_mood_features)
+            return "Numerical (mood and acoustic) values trained and saved."
+        else:
+            return "Admin only functionality."
     
 
     @app.route('/full_training')
     def fullTraining():
-        ai.teach(ai_global_var.scaled_features)
-        return "Full data trained and saved."
+        if login_global_var.admin:
+            ai.teach(ai_global_var.scaled_features)
+            return "Full data trained and saved."
+        else:
+            return "Admin only functionality."
     
 
     @app.route('/dataset')
     def dataset():
-        learning_set.buildDefaultLearningSet()
-        return "Dataset built and saved."
+        if login_global_var.admin:
+            learning_set.buildDefaultLearningSet()
+            return "Dataset built and saved."
+        else:
+            return "Admin only functionality."
     
     
     @app.route('/upload_playlist', methods=["POST"])
