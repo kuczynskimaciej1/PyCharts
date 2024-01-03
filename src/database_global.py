@@ -9,3 +9,5 @@ recommended_indices = None
 playlists = None
 tracks = None
 correlation = None
+
+ai = False
