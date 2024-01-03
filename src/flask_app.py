@@ -1,6 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, session, request, abort
 from secrets import token_hex
-import os
 import login_global_var
 import dl_data
 import learning_set
@@ -34,15 +33,10 @@ def flaskInit():
     @app.route('/after_login_setup')
     def afterLoginSetup():
         login_global_var.token_info = login_global_var.sp_oauth.get_access_token(request.args['code'])
-        print(f"login_global_var.token_info: {login_global_var.token_info}")
         session['token_info'] = login_global_var.token_info
-        print(f"session['token_info']: {session['token_info']}")
         login_global_var.spotify.auth = login_global_var.token_info['access_token']
-        print(f"login_global_var.spotify.auth: {login_global_var.spotify.auth}")
         login_global_var.user_info = login_global_var.spotify.me()
-        print(f"login_global_var.user_info: {login_global_var.user_info}")
         login_global_var.username = login_global_var.user_info['display_name']
-        print(f"login_global_var.username: {login_global_var.username}")
         database.addUserToDatabase()
 
         if login_global_var.username == 'kuczynskimaciej1':
