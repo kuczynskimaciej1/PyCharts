@@ -73,6 +73,7 @@ def getHistoryRecommendation(num_recommendations):
                         acousticness_array.mean(), loudness_array.mean(), 
                         tempo_array.mean()])
     
+
     database_global.parameters = str(mean_track)
     recommended_tracks = getBarRecommendation(mean_track, num_recommendations)
     return recommended_tracks
@@ -112,5 +113,6 @@ def getFavouritesRecommendation(num_recommendations):
                         tempo_array.mean()])
 
     database_global.parameters = str(mean_track)
+
     recommended_tracks = getBarRecommendation(mean_track, num_recommendations)
     return recommended_tracks

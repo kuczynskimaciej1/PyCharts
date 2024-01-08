@@ -3,6 +3,7 @@ from login_global_var import spotify
 from dl_data import downloadTrackMetadataToUse
 import ai_global_var
 
+
 def buildDefaultLearningSet():
     csv_filename = "learning_set/spotify_dataset_exported.csv"
 
@@ -32,6 +33,7 @@ def buildDefaultLearningSet():
 
         csv_writer.writeheader()
         csv_writer.writerows(data)
+
 
 def buildAPILearningSet():
     playlists_to_save = ["spotify:playlist:7sfrYAuobUw9O679LwuvIm", 

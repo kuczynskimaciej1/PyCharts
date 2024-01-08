@@ -3,11 +3,13 @@ import numpy as np
 import ai_global_var
 import dl_data
 
+
 def calculateCorrelation(playlist1, playlist2):
     playlist1_data_flat = playlist1[ai_global_var.all_features_list].values.flatten()
     playlist2_data_flat = playlist2[ai_global_var.all_features_list].values.flatten()
     correlation_coefficient = pearsonr(playlist1_data_flat, playlist2_data_flat)[0]
     return (correlation_coefficient)
+
 
 def calculateUserNumericals():
     favourites = dl_data.getUserFavourites(50)

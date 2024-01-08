@@ -11,7 +11,7 @@ import ai_global_var
 import pandas as pd
 import maths_and_stats
 import database
-import database_global
+import database_global_var
 
 
 def flaskInit():
@@ -88,9 +88,9 @@ def flaskInit():
     def browseRecommendations():
         db_connection, cursor = database.setupDatabaseConnection()
         playlist_query = cursor.execute('SELECT Playlist.* FROM Playlist JOIN User ON Playlist.user_id = User.user_internal_id WHERE User.spotify_name = ?', (login_global_var.username,))
-        database_global.playlists = playlist_query.fetchall()
+        database_global_var.playlists = playlist_query.fetchall()
         database.commitAndCloseDatabaseConnection(db_connection, cursor)
-        return render_template("browse_recommendations.html", playlists = database_global.playlists, user_info = login_global_var.user_info)
+        return render_template("browse_recommendations.html", playlists = database_global_var.playlists, user_info = login_global_var.user_info)
 
 
     @app.route('/browse_tracks', methods=['GET', 'POST'])
@@ -98,9 +98,9 @@ def flaskInit():
         playlist_id = request.form.get('playlist_id')
         db_connection, cursor = database.setupDatabaseConnection()
         tracks_query = cursor.execute('SELECT * FROM Track WHERE playlist_id = ?', (playlist_id,))
-        database_global.tracks = tracks_query.fetchall()
+        database_global_var.tracks = tracks_query.fetchall()
         database.commitAndCloseDatabaseConnection(db_connection, cursor)
-        return render_template('browse_tracks.html', tracks=database_global.tracks, user_info = login_global_var.user_info)
+        return render_template('browse_tracks.html', tracks=database_global_var.tracks, user_info = login_global_var.user_info)
 
 
     @app.route('/rate_track', methods=['GET', 'POST'])
@@ -155,10 +155,10 @@ def flaskInit():
         no_ai_playlist = no_ai_recommendation.getNoAITrackRecommendation(int(track), int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
 
-        database_global.correlation = correlation
-        database_global.generation_method = "single"
-        database_global.parameters = track
-        database_global.ai = True
+        database_global_var.correlation = correlation
+        database_global_var.generation_method = "single"
+        database_global_var.parameters = track
+        database_global_var.ai = True
 
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
     
@@ -171,9 +171,9 @@ def flaskInit():
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
 
-        database_global.generation_method = "singleNoAi"
-        database_global.parameters = track
-        database_global.ai = False
+        database_global_var.generation_method = "singleNoAi"
+        database_global_var.parameters = track
+        database_global_var.ai = False
 
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
 
@@ -202,10 +202,10 @@ def flaskInit():
             no_ai_playlist = no_ai_recommendation.getNoAIVectorRecommendation(vector, int(number_of_tracks))
             correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
 
-            database_global.correlation = correlation
-            database_global.generation_method = "vector"
-            database_global.parameters = database.vectorToString(vector)
-            database_global.ai = True
+            database_global_var.correlation = correlation
+            database_global_var.generation_method = "vector"
+            database_global_var.parameters = database.vectorToString(vector)
+            database_global_var.ai = True
 
             return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
         else:
@@ -233,9 +233,9 @@ def flaskInit():
             recommendations_data = recommendations.to_dict(orient='records')
             session['recommendations'] = recommendations_data
 
-            database_global.generation_method = "vectorNoAi"
-            database_global.parameters = database.vectorToString(vector)
-            database_global.ai = False
+            database_global_var.generation_method = "vectorNoAi"
+            database_global_var.parameters = database.vectorToString(vector)
+            database_global_var.ai = False
 
             return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
         else:
@@ -258,13 +258,13 @@ def flaskInit():
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
 
-        database_global.generation_method = "bar"
-        database_global.parameters = database.vectorToString(parameters)
+        database_global_var.generation_method = "bar"
+        database_global_var.parameters = database.vectorToString(parameters)
 
         no_ai_playlist = no_ai_recommendation.getNoAIBarRecommendation(parameters, int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
-        database_global.correlation = correlation
-        database_global.ai = True
+        database_global_var.correlation = correlation
+        database_global_var.ai = True
         
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
     
@@ -285,9 +285,9 @@ def flaskInit():
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
 
-        database_global.generation_method = "barNoAi"
-        database_global.parameters = parameters
-        database_global.ai = False
+        database_global_var.generation_method = "barNoAi"
+        database_global_var.parameters = parameters
+        database_global_var.ai = False
 
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
 
@@ -302,9 +302,9 @@ def flaskInit():
         no_ai_playlist = no_ai_recommendation.getNoAIHistoryRecommendation(int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
 
-        database_global.correlation = correlation
-        database_global.generation_method = "history"
-        database_global.ai = True
+        database_global_var.correlation = correlation
+        database_global_var.generation_method = "history"
+        database_global_var.ai = True
 
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
     
@@ -315,8 +315,8 @@ def flaskInit():
         recommendations = no_ai_recommendation.getNoAIHistoryRecommendation(int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
-        database_global.generation_method = "historyNoAi"
-        database_global.ai = False
+        database_global_var.generation_method = "historyNoAi"
+        database_global_var.ai = False
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
 
 
@@ -330,9 +330,9 @@ def flaskInit():
         no_ai_playlist = no_ai_recommendation.getNoAIFavouritesRecommendation(int(number_of_tracks))
         correlation = maths_and_stats.calculateCorrelation(recommendations, no_ai_playlist)
 
-        database_global.correlation = correlation
-        database_global.generation_method = "favourites"
-        database_global.ai = True
+        database_global_var.correlation = correlation
+        database_global_var.generation_method = "favourites"
+        database_global_var.ai = True
 
         return render_template("user_generate_ai.html", recommendations = recommendations, correlation = correlation, user_info = login_global_var.user_info)
     
@@ -343,8 +343,8 @@ def flaskInit():
         recommendations = no_ai_recommendation.getNoAIFavouritesRecommendation(int(number_of_tracks))
         recommendations_data = recommendations.to_dict(orient='records')
         session['recommendations'] = recommendations_data
-        database_global.generation_method = "favouritesNoAi"
-        database_global.ai = False
+        database_global_var.generation_method = "favouritesNoAi"
+        database_global_var.ai = False
         return render_template("user_generate.html", recommendations = recommendations, user_info = login_global_var.user_info)
 
 
@@ -392,10 +392,10 @@ def flaskInit():
 
         track_uris = ul_data.uploadPlaylist(playlist_name, recommendations)
 
-        if database_global.ai==True:
-            database.addPlaylistToDatabase(playlist_name, database_global.generation_method, database_global.parameters)
+        if database_global_var.ai==True:
+            database.addPlaylistToDatabase(playlist_name, database_global_var.generation_method, database_global_var.parameters)
             for index, track_uri in enumerate(track_uris):
-                database.addTrackToDatabase(None, index+1, track_uri, int(database_global.recommended_indices[index]), recommendations.iloc[index]['Track'], recommendations.iloc[index]['Artist'], recommendations.iloc[index]['Album'])
+                database.addTrackToDatabase(None, index+1, track_uri, int(database_global_var.recommended_indices[index]), recommendations.iloc[index]['Track'], recommendations.iloc[index]['Artist'], recommendations.iloc[index]['Album'])
 
         return f"Playlist '{playlist_name}' created successfully!"
     
