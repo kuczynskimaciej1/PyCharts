@@ -3,7 +3,7 @@ import random
 import datetime
 import string
 import login_global_var
-import database_global
+import database_global_var
 
 
 def generateInternalId():
@@ -56,7 +56,7 @@ def addUserToDatabase():
 
     if not existing_user:
         internal_id = generateInternalId()
-        database_global.user_id = internal_id
+        database_global_var.user_id = internal_id
         query_add_to_database = "INSERT INTO user (spotify_name, uri, user_internal_id) VALUES (?, ?, ?)"
         cursor.execute(query_add_to_database, (username, uri, internal_id))
         commitAndCloseDatabaseConnection(connection, cursor)
@@ -64,17 +64,17 @@ def addUserToDatabase():
         query_select_internal_id = "SELECT user_internal_id FROM user WHERE spotify_name = ? AND uri = ?"
         cursor.execute(query_select_internal_id, (username, uri))
         internal_id = cursor.fetchone()
-        database_global.user_id = internal_id[0]
+        database_global_var.user_id = internal_id[0]
 
 
 def addPlaylistToDatabase(playlist_name, generation_method, parameters):
     connection, cursor = setupDatabaseConnection()
 
-    user_id = database_global.user_id
+    user_id = database_global_var.user_id
     date_time = getDateAndTime()
-    correlation = database_global.correlation
+    correlation = database_global_var.correlation
     internal_id = generateInternalId()
-    database_global.playlist_id = internal_id
+    database_global_var.playlist_id = internal_id
 
     query_add_to_database = "INSERT INTO playlist (user_id, playlist_name, date_of_creation, playlist_internal_id, generation_method, parameters, correlation) VALUES (?, ?, ?, ?, ?, ?, ?)"
     cursor.execute(query_add_to_database, (user_id, playlist_name, date_time, internal_id, generation_method, parameters, correlation))
@@ -84,7 +84,7 @@ def addPlaylistToDatabase(playlist_name, generation_method, parameters):
 def addTrackToDatabase(mark_given, rank_on_list, uri, dataset_id, title, artist, album):
     connection, cursor = setupDatabaseConnection()
 
-    playlist_id = database_global.playlist_id
+    playlist_id = database_global_var.playlist_id
 
     query_add_to_database = "INSERT INTO track (playlist_id, mark_given, rank_on_list, uri, dataset_id, title, artist, album) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
     cursor.execute(query_add_to_database, (playlist_id, mark_given, rank_on_list, uri, dataset_id, title, artist, album))
