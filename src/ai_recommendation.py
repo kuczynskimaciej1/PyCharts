@@ -1,14 +1,14 @@
 import numpy as np
 import ai_global_var
 import dl_data
-import database_global
+import database_global_var
 
 def getTrackRecommendation(track_index, num_recommendations):
     input_track = ai_global_var.scaled_features[track_index].reshape(1, -1)
     reconstructed_track = ai_global_var.ai_model.predict(input_track)
     distances = np.linalg.norm(ai_global_var.scaled_features - reconstructed_track, axis=1)
     recommended_indices = np.argsort(distances)[1:num_recommendations + 1]
-    database_global.recommended_indices = recommended_indices
+    database_global_var.recommended_indices = recommended_indices
     recommended_tracks = ai_global_var.df.iloc[recommended_indices]
     print(recommended_tracks)
     return recommended_tracks
@@ -20,7 +20,7 @@ def getVectorRecommendation(track_indices, num_recommendations):
     reconstructed_mean_track = ai_global_var.ai_model.predict(mean_track)
     distances = np.linalg.norm(ai_global_var.scaled_features - reconstructed_mean_track, axis=1)
     recommended_indices = np.argsort(distances)[:num_recommendations]
-    database_global.recommended_indices = recommended_indices
+    database_global_var.recommended_indices = recommended_indices
     recommended_tracks = ai_global_var.df.iloc[recommended_indices]
     print("Recommended Tracks:")
     print(recommended_tracks[['Track', 'Artist']])
@@ -32,11 +32,11 @@ def getBarRecommendation(parameters, num_recommendations):
     reconstructed_input_features = ai_global_var.ai_model_mood.predict(input_features)
     distances = np.linalg.norm(ai_global_var.scaled_mood_features - reconstructed_input_features, axis=1)
     recommended_indices = np.argsort(distances)[:num_recommendations]
-    database_global.recommended_indices = recommended_indices
+    database_global_var.recommended_indices = recommended_indices
     recommended_tracks = ai_global_var.df.iloc[recommended_indices]
     print("Recommended Tracks:")
     print(recommended_tracks[['Track', 'Artist']])
-    print(database_global.user_id)
+    print(database_global_var.user_id)
     return recommended_tracks
 
 
@@ -74,7 +74,7 @@ def getHistoryRecommendation(num_recommendations):
                         tempo_array.mean()])
     
 
-    database_global.parameters = str(mean_track)
+    database_global_var.parameters = str(mean_track)
     recommended_tracks = getBarRecommendation(mean_track, num_recommendations)
     return recommended_tracks
 
@@ -112,7 +112,7 @@ def getFavouritesRecommendation(num_recommendations):
                         acousticness_array.mean(), loudness_array.mean(), 
                         tempo_array.mean()])
 
-    database_global.parameters = str(mean_track)
+    database_global_var.parameters = str(mean_track)
 
     recommended_tracks = getBarRecommendation(mean_track, num_recommendations)
     return recommended_tracks
