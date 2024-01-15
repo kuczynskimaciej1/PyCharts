@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Maciej Kuczynski" />
+    <title>PyCharts</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>Welcome to PyCharts, {{ user_info['display_name'] }}!</h1>
+    </header>
+
+    <h3>Numerical statistics:</h3>
+    <div id="nice-stats">
+      <li>Speechiness</li>
+      <li>{{ numerical_statistics[0] }}</li>
+      <li>
+        <form action="{{ url_for('columnStatistics') }}" method="POST">
+          <input type="hidden" name="column_name" value="Speechiness" />
+          <button id="nice-button">See more</button>
+        </form>
+      </li>
+
+      <li>Instrumentalness</li>
+      <li>{{ numerical_statistics[1] }}</li>
+      <li>
+        <form action="{{ url_for('columnStatistics') }}" method="POST">
+          <input type="hidden" name="column_name" value="Instrumentalness" />
+          <button id="nice-button">See more</button>
+        </form>
+      </li>
+
+      <li>Liveness</li>
+      <li>{{ numerical_statistics[2] }}</li>
+      <li>
+        <form action="{{ url_for('columnStatistics') }}" method="POST">
+          <input type="hidden" name="column_name" value="Liveness" />
+          <button id="nice-button">See more</button>
+        </form>
+      </li>
+
+      <li>Valence</li>
+      <li>{{ numerical_statistics[3] }}</li>
+      <li>
+        <form action="{{ url_for('columnStatistics') }}" method="POST">
+          <input type="hidden" name="column_name" value="Valence" />
+          <button id="nice-button">See more</button>
+        </form>
+      </li>
+
+      <li>Danceability</li>
+      <li>{{ numerical_statistics[4] }}</li>
+      <li>
+        <form action="{{ url_for('columnStatistics') }}" method="POST">
+          <input type="hidden" name="column_name" value="Danceability" />
+          <button id="nice-button">See more</button>
+        </form>
+      </li>
+
+      <li>Energy</li>
+      <li>{{ numerical_statistics[5] }}</li>
+      <li>
+        <form action="{{ url_for('columnStatistics') }}" method="POST">
+          <input type="hidden" name="column_name" value="Energy" />
+          <button id="nice-button">See more</button>
+        </form>
+      </li>
+
+      <li>Acousticness</li>
+      <li>{{ numerical_statistics[6] }}</li>
+      <li>
+        <form action="{{ url_for('columnStatistics') }}" method="POST">
+          <input type="hidden" name="column_name" value="Acousticness" />
+          <button id="nice-button">See more</button>
+        </form>
+      </li>
+
+      <li>Loudness</li>
+      <li>{{ numerical_statistics[7] }}</li>
+      <li>
+        <form action="{{ url_for('columnStatistics') }}" method="POST">
+          <input type="hidden" name="column_name" value="Loudness" />
+          <button id="nice-button">See more</button>
+        </form>
+      </li>
+
+      <li>Tempo</li>
+      <li>{{ numerical_statistics[8] }}</li>
+      <li>
+        <form action="{{ url_for('columnStatistics') }}" method="POST">
+          <input type="hidden" name="column_name" value="Tempo" />
+          <button id="nice-button">See more</button>
+        </form>
+      </li>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    <footer>
+      <p>
+        &copy; 2023 by Maciej Kuczynski for Czestochowa University of
+        Technology. All rights reserved.
+      </p>
+    </footer>
+  </body>
+</html>

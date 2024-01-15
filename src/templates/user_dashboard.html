@@ -38,6 +38,10 @@
           <button type="submit" id="nice-button">Browse the dataset</button>
         </form>
 <br>
+        <form action="{{ url_for('datasetStatistics') }}" method="GET">
+          <button type="submit" id="nice-button">See the dataset statistics</button>
+        </form>
+<br>
         <form action="{{ url_for('browseRecommendations') }}" method="GET">
           <button type="submit" id="nice-button">Browse your AI recommendations history</button>
         </form>

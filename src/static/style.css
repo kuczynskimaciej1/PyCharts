@@ -132,9 +132,23 @@ img {
             border-radius: 5px;
             text-align: center;
             display: grid;
-            grid-template-columns: auto auto;
+            grid-template-columns: auto auto auto;
             gap: 10px;
             font-size: 32px;
+}
+
+#nice-stats-column {
+    list-style: none;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    text-align: center;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px;
+    font-size: 32px;
 }
 
 #nice-stats li:hover {

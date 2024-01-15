@@ -21,7 +21,6 @@ def teachEmbeddings(label):
     model = models.Sequential([
         layers.Embedding(input_dim=num_categories, output_dim=embedding_dim),
         layers.Flatten(),
-        layers.Dense(128, activation='relu'),
         layers.Dense(64, activation='relu'),
         layers.Dense(128, activation='relu'),
         layers.Dense(256, activation='relu'),
@@ -73,7 +72,6 @@ def teach(features):
     model = models.Sequential([
         layers.Dense(128, activation='relu', input_shape=(features.shape[1],)),
         layers.Dropout(0.2),
-        layers.Dense(64, activation='relu'),
         layers.Dense(128, activation='relu'),
         #layers.Dropout(0.5),
         layers.Dense(256, activation='relu'),
@@ -116,7 +114,6 @@ def teachNumerical(features):
     model = models.Sequential([
         layers.Dense(128, activation='relu', input_shape=(features.shape[1],)),
         layers.Dropout(0.2),
-        layers.Dense(64, activation='relu'),
         layers.Dense(128, activation='relu'),
         #layers.Dropout(0.5),
         layers.Dense(256, activation='relu'),

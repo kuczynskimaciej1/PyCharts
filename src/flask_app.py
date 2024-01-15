@@ -84,6 +84,25 @@ def flaskInit():
         return render_template("browse_dataset.html", data = data, user_info = login_global_var.user_info)
     
 
+    @app.route('/dataset_statistics')
+    def datasetStatistics():
+        numerical_statistics = maths_and_stats.calculateDatasetNumericals()
+        for i, element in enumerate(numerical_statistics):
+            numerical_statistics[i] = round(element, 5)
+        return render_template("dataset_statistics.html", numerical_statistics = numerical_statistics, user_info = login_global_var.user_info)
+    
+
+    @app.route('/column_statistics', methods=['GET', 'POST'])
+    def columnStatistics():
+        print(ai_global_var.data_to_display)
+        column_name = request.form.get('column_name')
+        print(column_name)
+        column_df = ai_global_var.data_to_display[column_name]
+        column_statistics, histogram = maths_and_stats.calculateColumnStats(column_df, column_name)
+        print(column_statistics)
+        return render_template("column_statistics.html", column_statistics = column_statistics, histogram = histogram, column_name = column_name, user_info = login_global_var.user_info)
+
+
     @app.route('/browse_recommendations')
     def browseRecommendations():
         db_connection, cursor = database.setupDatabaseConnection()
@@ -131,7 +150,7 @@ def flaskInit():
         numerical_statistics = maths_and_stats.calculateUserNumericals()
         for i, element in enumerate(numerical_statistics):
             numerical_statistics[i] = round(element, 5)
-        return render_template("user_statistics.html", numerical_statistics = numerical_statistics, user_info = login_global_var.user_info)
+        return render_template("dataset_statistics.html", numerical_statistics = numerical_statistics, user_info = login_global_var.user_info)
     
 
     @app.route('/ai_generate_options')

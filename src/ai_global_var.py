@@ -2,7 +2,7 @@ import pandas as pd
 from keras.models import load_model
 from sklearn.preprocessing import StandardScaler
 
-global ai_model, df, artist_encoded, album_encoded, presentation_features, all_features, mood_features, scaled_features, scaled_mood_features
+global ai_model, df, artist_encoded, album_encoded, presentation_features, all_features, mood_features, scaled_features, scaled_mood_features, data_to_display
 
 ai_model = load_model("models/spotify_recommendation_model.h5")
 ai_model_mood = load_model("models/spotify_recommendation_model_mood.h5")
@@ -62,3 +62,5 @@ all_features_list = ['Speechiness',
                    'Duration_min',
                    'Artist_num',
                    'Album_num']
+
+data_to_display = None

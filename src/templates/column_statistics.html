@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Maciej Kuczynski" />
+    <title>PyCharts</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>Welcome to PyCharts, {{ user_info['display_name'] }}!</h1>
+    </header>
+    <section>
+      <h3>Statistics for {{ column_name }}</h3>
+      <div id="nice-stats-column">
+        <li>Mean</li>
+        <li>{{ column_statistics['Mean'] }}</li>
+
+        <li>Median</li>
+        <li>{{ column_statistics['Median'] }}</li>
+
+        <li>Standard deviation</li>
+        <li>{{ column_statistics['Standard deviation'] }}</li>
+
+        <li>Max value</li>
+        <li>{{ column_statistics['Max value'] }}</li>
+
+        <li>Min value</li>
+        <li>{{ column_statistics['Min value'] }}</li>
+
+        <li>Quartile 1</li>
+        <li>{{ column_statistics['Quartile 1'] }}</li>
+
+        <li>Quartile 3</li>
+        <li>{{ column_statistics['Quartile 3'] }}</li>
+
+        <li>Skew</li>
+        <li>{{ column_statistics['Skew'] }}</li>
+
+        <li>Kurtosis</li>
+        <li>{{ column_statistics['Kurtosis'] }}</li>
+      </div>
+    </section>
+    <section>
+      <h3>Histogram of values distribution</h3>
+      <img
+        src="data:image/png;base64,{{ histogram }}"
+        alt="histogram"
+        style="width: 1200px; height: 1024px"
+      />
+    </section>
+    <br />
+    <br />
+    <br />
+
+    <footer>
+      <p>
+        &copy; 2023 by Maciej Kuczynski for Czestochowa University of
+        Technology. All rights reserved.
+      </p>
+    </footer>
+  </body>
+</html>
