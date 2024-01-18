@@ -53,17 +53,18 @@ def calculateColumnStats(column_df, column_name):
         'Kurtosis': column_df.kurtosis()
     }
 
-    histogram = generate_histogram(column_df, column_name)
+    histogram = generateHistogram(column_df, column_name)
     return (stats, histogram)
 
 
-def generate_histogram(column_df, column_name):
+def generateHistogram(column_df, column_name):
 
     plt.figure(figsize=(30, 24))
     plt.hist(column_df, bins=50, color='skyblue', edgecolor='black')
-    plt.title(f'Plot for {column_name}', fontsize=30)
-    plt.xlabel('Value', fontsize=24)
-    plt.ylabel('Indices', fontsize=24)
+    plt.title(f'Plot for {column_name}', fontsize=60)
+    plt.xlabel('Value', fontsize=60)
+    plt.ylabel('Indices', fontsize=60)
+    plt.tick_params(axis='both', which='major', labelsize=30)
 
     buf = BytesIO()
     plt.savefig(buf, format='png')

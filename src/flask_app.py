@@ -99,6 +99,9 @@ def flaskInit():
         print(column_name)
         column_df = ai_global_var.data_to_display[column_name]
         column_statistics, histogram = maths_and_stats.calculateColumnStats(column_df, column_name)
+        for i, element in enumerate(column_statistics):
+            column_statistics[element] = float(column_statistics[element])
+            column_statistics[element] = round(column_statistics[element], 5)
         print(column_statistics)
         return render_template("column_statistics.html", column_statistics = column_statistics, histogram = histogram, column_name = column_name, user_info = login_global_var.user_info)
 

@@ -37,6 +37,7 @@ def teachEmbeddings(label):
     model_checkpoint = ModelCheckpoint(checkpoint_path, save_best_only=True)
     history = model.fit(X_train, X_train, epochs=100, batch_size=16, validation_data=(X_test, X_test), callbacks=[early_stopping, model_checkpoint])
     model.save(f'models/spotify_recommendation_model_{label}.h5')
+    print(model.summary())
 
     training_accuracy = history.history['accuracy']
     validation_accuracy = history.history['val_accuracy']
@@ -93,6 +94,7 @@ def teach(features):
     model_checkpoint = ModelCheckpoint(checkpoint_path, save_best_only=True)
     history = model.fit(X_train, X_train, epochs=100, batch_size=16, validation_data=(X_test, X_test), callbacks=[early_stopping, model_checkpoint])
     model.save('models/spotify_recommendation_model.h5')
+    print(model.summary())
 
     training_accuracy = history.history['mean_squared_error']
     validation_accuracy = history.history['val_mean_squared_error']
@@ -135,6 +137,7 @@ def teachNumerical(features):
     model_checkpoint = ModelCheckpoint(checkpoint_path, save_best_only=True)
     history = model.fit(X_train, X_train, epochs=100, batch_size=16, validation_data=(X_test, X_test), callbacks=[early_stopping, model_checkpoint])
     model.save('models/spotify_recommendation_model_mood.h5')
+    print(model.summary())
 
     training_accuracy = history.history['mean_squared_error']
     validation_accuracy = history.history['val_mean_squared_error']
